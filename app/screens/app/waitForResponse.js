@@ -1,5 +1,5 @@
-window.navigator.userAgent = "ReactNative";
-import React from "react";
+window.navigator.userAgent = 'ReactNative';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,19 @@ import {
   Easing,
   Platform,
   StyleSheet,
-  AsyncStorage
-} from "react-native";
-import axios from "axios";
-import { StackActions, NavigationActions } from "react-navigation";
+  AsyncStorage,
+} from 'react-native';
+import axios from 'axios';
+import { StackActions, NavigationActions } from 'react-navigation';
 
-import firebase from "react-native-firebase";
-import PushNotification from "react-native-push-notification";
-import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { Footer, YesOrNo } from "../../components";
-import { Theme } from "../../configs/theme";
-import stringsoflanguages from "../../locale";
-import { base_url } from "../../configs/const";
-import { StylePanel } from "../../configs/styles";
+import firebase from 'react-native-firebase';
+import PushNotification from 'react-native-push-notification';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { Footer, YesOrNo } from '../../components';
+import { Theme } from '../../configs/theme';
+import stringsoflanguages from '../../locale';
+import { base_url } from '../../configs/const';
+import { StylePanel } from '../../configs/styles';
 export default class WaitForResponse extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -31,47 +31,50 @@ export default class WaitForResponse extends React.PureComponent {
       fill: 0,
       solved: false,
       time: 300000,
-      device_token: ""
+      device_token: '',
     };
   }
+  vedom = this.props.navigation.getParam('vedom', 'default');
   componentDidMount() {
+    console.log('VEDOM', this.vedom);
     const time_in_minutes = 5;
     var current_time = Date.parse(new Date());
     var deadline = new Date(current_time + time_in_minutes * 60 * 1000);
     this.run_clock(deadline);
     this.getToken();
     this.circularProgress.animate(100, this.state.time, Easing.quad);
-    AppState.addEventListener("change", this.handleAppStateChange);
+    AppState.addEventListener('change', this.handleAppStateChange);
     PushNotification.configure({
       onRegister: function(token) {
-        console.log("TOKEN:", token);
+        console.log('TOKEN:', token);
       },
       onNotification: function(notification) {
         if (notification.foreground) {
-          console.log("notification.foreground", notification);
+          console.log('notification.foreground', notification);
           // this.props.navigation.navigate("WaitForResponse");
         }
       },
-      onNotificationOpened:(notification)=>{
-        this.props.navigation.navigate("WaitForResponse");
-      }
+      onNotificationOpened: notification => {
+        this.props.navigation.navigate('WaitForResponse');
+      },
     });
-    console.log("REVIEW_ID",this.review);
+    console.log('REVIEW_ID', this.review);
     this.notificationOpenedListener = firebase
       .notifications()
       .onNotificationOpened(notificationOpen => {
         const notification = notificationOpen.notification;
-        console.log("NOTIF", notification._data.review_id);
-        this.props.navigation.navigate("WaitForResponse",{review:notification._data.review_id});
-
+        console.log('NOTIF', notification._data.review_id);
+        this.props.navigation.navigate('WaitForResponse', {
+          review: notification._data.review_id,
+        });
       });
   }
   componentWillUnmount() {
-    AppState.removeEventListener("change", this.handleAppStateChange);
+    AppState.removeEventListener('change', this.handleAppStateChange);
     this.notificationOpenedListener();
   }
   static navigationOptions = ({ navigation }) => ({
-    headerRight: null
+    headerRight: null,
   });
   getToken = () => {
     firebase
@@ -83,9 +86,9 @@ export default class WaitForResponse extends React.PureComponent {
             .messaging()
             .getToken()
             .then(token => {
-              console.log("token: ,", token);
+              console.log('token: ,', token);
               this.setState({
-                device_token: token
+                device_token: token,
               });
             });
           // user has permissions
@@ -94,32 +97,32 @@ export default class WaitForResponse extends React.PureComponent {
             .messaging()
             .requestPermission()
             .then(() => {
-              alert("User Now Has Permission");
+              alert('User Now Has Permission');
               firebase
                 .messaging()
                 .getToken()
                 .then(token => {
-                  console.log("token: ", token);
+                  console.log('token: ', token);
 
                   this.setState({
-                    device_token: token
+                    device_token: token,
                   });
                 });
             })
             .catch(error => {
               console.log(error);
-            //  alert("Error", error);
+              //  alert("Error", error);
             });
         }
       });
   };
 
   handleAppStateChange = appState => {
-    if (appState === "background") {
-      console.log("BACKGROUND", new Date().toLocaleString());
+    if (appState === 'background') {
+      console.log('BACKGROUND', new Date().toLocaleString());
       let remainingTime = (this.state.minute * 60 + this.state.seconds) * 1000;
       console.log(
-        "this.state.minute",
+        'this.state.minute',
         remainingTime,
         this.state.minute,
         this.state.seconds
@@ -127,34 +130,34 @@ export default class WaitForResponse extends React.PureComponent {
       if (remainingTime !== 0) {
         let date = new Date(Date.now() + remainingTime);
         PushNotification.localNotificationSchedule({
-          message: "Вам позвонили?",
+          message: 'Вам позвонили?',
           date,
-          soundName: "rush"
+          soundName: 'rush',
         });
       }
     } else {
-      console.log("FOREGROUND", new Date().toLocaleString());
+      console.log('FOREGROUND', new Date().toLocaleString());
     }
   };
-  review = this.props.navigation.getParam("review", "default");
+  review = this.props.navigation.getParam('review', 'default');
   run_clock = deadline => {
     clearInterval(timeinterval);
     var timeinterval = setInterval(() => {
       var t = Date.parse(deadline) - Date.parse(new Date());
       this.setState({
-        time: t
+        time: t,
       });
       var seconds = Math.floor((t / 1000) % 60);
       var minutes = Math.floor((t / 1000 / 60) % 60);
       if (seconds >= 0 && minutes >= 0) {
         this.setState({
           minute: minutes,
-          seconds: seconds
+          seconds: seconds,
         });
       } else {
         this.setState({
           minute: 0,
-          seconds: 0
+          seconds: 0,
         });
       }
     }, 1000);
@@ -165,54 +168,52 @@ export default class WaitForResponse extends React.PureComponent {
   handleSolved = solved => {
     this.postUpdate(solved);
 
-    if (solved === "0") {
+    if (solved === '0') {
       this.postAdgs();
-      this.props.navigation.navigate("Uncalled");
+      this.props.navigation.navigate('Uncalled');
     } else {
-      this.props.navigation.navigate("Called");
+      this.props.navigation.navigate('Called');
     }
   };
   async postUpdate(solved) {
-    const token = await AsyncStorage.getItem("id_token");
-    console.log("  this.review", this.review, this.state.called, solved);
+    const token = await AsyncStorage.getItem('id_token');
+    console.log('  this.review',this.vedom , this.review, this.state.called, solved);
+    const url =
+      this.vedom === 'so'
+        ? '/api/review/updateNewRevStatus/'
+        : '/api/review/updateStatus/';
 
     axios
       .put(
-        base_url +
-          "/api/review/updateStatus/" +
-          this.review +
-          "/" +
-          this.state.called +
-          "/" +
-          solved,
+        base_url + url + this.review + '/' + this.state.called + '/' + solved,
         { device_token: this.state.device_token },
         { headers: { Authorization: token } }
       )
       .then(response => {
-        console.log("/api/review/updateStatus/", response);
+        console.log('/api/review/updateStatus/', response);
       })
       .catch(error => {
         console.log(error, 66);
       });
   }
   async postAdgs() {
-    const token = await AsyncStorage.getItem("id_token");
-    console.log("TOKEN_ADGS", token, this.review);
+    const token = await AsyncStorage.getItem('id_token');
+    console.log('TOKEN_ADGS', token, this.review);
+    const url =
+      this.vedom === 'so'
+        ? '/api/review/sendnewrevtoadgs/'
+        : '/api/review/sendtoadgs/';
     axios
       .post(
-        base_url + "/api/review/sendtoadgs/" + this.review,
+        base_url + url + this.review,
         {},
         { headers: { Authorization: token } }
       )
       .then(response => {
-        console.log("postadgs", response);
+        console.log('postadgs', response);
       })
       .catch(function(error) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log("ERROR:"+error.response);
       });
   }
   render() {
@@ -221,15 +222,14 @@ export default class WaitForResponse extends React.PureComponent {
       <View style={StylePanel.container}>
         <View style={styles.upView}>
           <AnimatedCircularProgress
-            style={{ marginTop: 30, marginHorizontal: "15%" }}
+            style={{ marginTop: 30, marginHorizontal: '15%' }}
             ref={ref => (this.circularProgress = ref)}
             size={250}
             width={18}
             rotation={0}
             fill={fill}
             tintColor={Theme.colors.yellow}
-            backgroundColor={Theme.colors.gray26}
-          >
+            backgroundColor={Theme.colors.gray26}>
             {() => (
               <Text style={styles.timeTxt}>
                 0{minute}:{seconds < 10 ? 0 : null}
@@ -250,8 +250,8 @@ export default class WaitForResponse extends React.PureComponent {
                   noStyle={styles.sendBtnNo}
                   yesTitleStyle={styles.sendBtnTxtYes}
                   noTitleStyle={styles.sendBtnTxtNo}
-                  onPressYes={() => this.handleSolved("1")}
-                  onPressNo={() => this.handleSolved("0")}
+                  onPressYes={() => this.handleSolved('1')}
+                  onPressNo={() => this.handleSolved('0')}
                 />
               ) : (
                 <YesOrNo
@@ -261,8 +261,8 @@ export default class WaitForResponse extends React.PureComponent {
                   noStyle={styles.sendBtnNo}
                   yesTitleStyle={styles.sendBtnTxtYes}
                   noTitleStyle={styles.sendBtnTxtNo}
-                  onPressYes={() => this.handleCalled("1")}
-                  onPressNo={() => this.handleCalled("0")}
+                  onPressYes={() => this.handleCalled('1')}
+                  onPressNo={() => this.handleCalled('0')}
                 />
               )}
             </View>
@@ -283,89 +283,89 @@ export default class WaitForResponse extends React.PureComponent {
   }
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.bcground
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: Theme.colors.bcground,
+  // },
   upView: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   downView: {
     flex: 1,
-    paddingTop: 60
+    paddingTop: 60,
   },
   subDownView: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   footerStyle: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
     flex: 1,
-    width: "90%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    marginHorizontal: "5%"
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginHorizontal: '5%',
   },
   timeTxt: {
     fontSize: 36,
     color: Theme.colors.yellow,
-    fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined,
-    fontWeight: "200"
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : undefined,
+    fontWeight: '200',
   },
   subDownTxt: {
     fontSize: 26,
-    textAlign: "center",
+    textAlign: 'center',
     color: Theme.colors.yellow,
-    width: "90%",
-    marginHorizontal: "5%",
-    fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined,
-    fontWeight: "100"
+    width: '90%',
+    marginHorizontal: '5%',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-light' : undefined,
+    fontWeight: '100',
   },
-  answerContainer: {
-    flex: 1,
-    flexDirection: "row",
-    marginTop: 10
-  },
+  // answerContainer: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   marginTop: 10,
+  // },
   waitTxt: {
     fontSize: 14,
-    textAlign: "center",
-    color: "white",
-    width: "90%",
-    marginHorizontal: "5%",
-    marginTop: 20
+    textAlign: 'center',
+    color: 'white',
+    width: '90%',
+    marginHorizontal: '5%',
+    marginTop: 20,
   },
   sendBtnYes: {
-    width: "40%",
+    width: '40%',
     height: 45,
     backgroundColor: Theme.colors.yellow,
-    marginHorizontal: "5%",
+    marginHorizontal: '5%',
     marginVertical: 10,
-    justifyContent: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   sendBtnNo: {
-    width: "40%",
+    width: '40%',
     height: 45,
     borderColor: Theme.colors.yellow,
     borderWidth: 1,
-    marginHorizontal: "5%",
+    marginHorizontal: '5%',
     marginVertical: 10,
-    justifyContent: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   sendBtnTxtYes: {
     color: Theme.colors.bcground,
     fontSize: Theme.fonts.sizes.p6,
-    textAlign: "center"
+    textAlign: 'center',
   },
   sendBtnTxtNo: {
     color: Theme.colors.yellow,
     fontSize: Theme.fonts.sizes.p6,
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 });

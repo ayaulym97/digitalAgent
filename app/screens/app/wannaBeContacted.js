@@ -7,7 +7,10 @@ import { Footer, YesOrNo } from "../../components";
 import stringsoflanguages  from "../../locale"
 export default class WannaBeContacted extends Component {
   review = this.props.navigation.getParam("review", "default");
+  vedom = this.props.navigation.getParam("vedom", "default");
+  
   render() {
+    console.log("VEDOM",this.vedom)
     return (
       <View style={StylePanel.container}>
         <View style={styles.upView}>
@@ -29,7 +32,9 @@ export default class WannaBeContacted extends Component {
             noTitleStyle={styles.sendBtnTxtNo}
             onPressYes={() =>
               this.props.navigation.navigate("WaitForResponse", {
-                review: this.review
+                review: this.review,
+                vedom:this.vedom
+                
               })
             }
             onPressNo={() => this.props.navigation.navigate("Called")}

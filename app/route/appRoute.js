@@ -6,6 +6,7 @@ import {
   SelectVedom,
   SelectCity,
   Estimate,
+  EstimateSO,
   WaitForResponse,
   WannaBeContacted,
   AfterEightPm,
@@ -43,8 +44,14 @@ const app = createStackNavigator(
     Estimate: {
       screen: Estimate
     },
+    EstimateSO: {
+      screen: EstimateSO
+    },
     WannaBeContacted: {
-      screen: WannaBeContacted
+      screen: WannaBeContacted,
+      navigationOptions: {
+        headerLeft: null
+      }
     },
     AfterEightPm: {
       screen: AfterEightPm
@@ -69,7 +76,7 @@ const app = createStackNavigator(
     }
   },
   {
-    initialRouteName: "PinPassword",
+    initialRouteName: "SelectVedom",
     navigationOptions: ({ navigation }) => ({
       headerStyle: {
         backgroundColor: Theme.colors.gray26,

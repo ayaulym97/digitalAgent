@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from "react";
 import { AsyncStorage } from "react-native";
 import root from "./app/route";

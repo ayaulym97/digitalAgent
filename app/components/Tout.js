@@ -25,6 +25,19 @@ class Tout extends PureComponent {
       this.toutRef = node;
     }
   };
+  handleInstitution=(item)=>{
+    if (this.props.vedom==="so") {
+      this.props.navigation.navigate("EstimateSO", {
+        cons: item,
+        vedom: this.props.vedom
+      })
+    } else {
+      this.props.navigation.navigate("Estimate", {
+        cons: item,
+        vedom: this.props.vedom
+      })
+    }
+  }
 
   render() {
     let categoryLinks;
@@ -36,12 +49,7 @@ class Tout extends PureComponent {
               <TouchableOpacity
                 key={item._id}
                 style={styles.advancedcityContainer}
-                onPress={() =>
-                  this.props.navigation.navigate("Estimate", {
-                    cons: item,
-                    vedom: this.props.vedom
-                  })
-                }
+                onPress={()=>this.handleInstitution(item)}
               >
                 <View style={styles.content}>
                   <Text style={styles.cityTxt}>{item.name}</Text>

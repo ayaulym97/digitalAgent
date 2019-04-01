@@ -1,5 +1,6 @@
 import SelectCity from "./selectCity";
 import Estimate from "./estimate";
+import EstimateSO from "./EstimateSO";
 import WaitForResponse from "./waitForResponse";
 import Called from "./called";
 import Uncalled from "./unCalled";
@@ -15,6 +16,7 @@ export {
   SelectVedom,
   Mtszn,
   Estimate,
+  EstimateSO,
   WaitForResponse,
   Called,
   Uncalled,

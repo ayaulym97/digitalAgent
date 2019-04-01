@@ -4,9 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.horcrux.svg.SvgPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.horcrux.svg.SvgPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import org.wonday.pdf.RCTPdfView;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
@@ -49,9 +50,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
         new MainReactPackage(),
+            new RNGestureHandlerPackage(),
+            new SvgPackage(),
             new RNFetchBlobPackage(),
             new VectorIconsPackage(),
-            new SvgPackage(),
+  
             new ReactNativePushNotificationPackage(),
             new RCTPdfView(),
             new ReactNativeLocalizationPackage(),

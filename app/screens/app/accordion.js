@@ -148,6 +148,7 @@ export default class Accordion extends PureComponent {
                     activeTab={activeTab}
                     isOpenTab={item._id === activeTab}
                     handleDistricts={() => this.handleDistricts(item, item._id)}
+                    //handleInstitution={()=>this.handleInstitution()}
                     handleLayout={() => this.handleLayout()} //when layout is triggered for touts, we can measure them
                   />
                 );

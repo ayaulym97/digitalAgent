@@ -30,7 +30,8 @@ export default class Agreement extends Component {
             size={32}
             color="white"
             style={{
-              marginLeft: 15
+              marginLeft: 15,
+              marginTop:30
             }}
           />
         </TouchableOpacity>

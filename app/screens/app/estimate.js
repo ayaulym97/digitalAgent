@@ -53,10 +53,17 @@ export default class Estimate extends Component {
     });
   };
   handleSendBtn = () => {
+    var currentDate = new Date();
+    var currentHour = currentDate.getHours();
     if (this.state.selectedStar === 0) {
       Alert.alert("Оцените учреждения по 5 шкaле перед отпрaвкой жaлобы");
     } else {
-      this.postReview();
+      if (currentHour >= 8 && currentHour <= 20) {
+        this.postReview();
+      } else {
+        Alert.alert('Жалобы вне рабочее время не принимаются!');
+      }
+
     }
   };
   async postReview() {
@@ -64,8 +71,7 @@ export default class Estimate extends Component {
     const token = await AsyncStorage.getItem("id_token");
     const user_id = await AsyncStorage.getItem("user_id");
     console.log("USER_ID", user_id, "TOKEN_REVIEW", token);
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
+  
     console.log(
       "CON_ID",
       this.cons._id,
@@ -99,21 +105,21 @@ export default class Estimate extends Component {
           review_id: response.data._id
         });
         console.log(this.state.review_id, "REVIEW78");
-        if (currentHour >= 8 && currentHour <= 20) {
+    
           if (this.state.selectedStar === 5) {
             this.props.navigation.navigate("Called");
           } else if (this.state.selectedStar === 4) {
             this.props.navigation.navigate("WannaBeContacted", {
-              review: this.state.review_id
+              review: this.state.review_id,
+              vedom:this.vedom
             });
           } else {
             this.props.navigation.navigate("WaitForResponse", {
-              review: this.state.review_id
+              review: this.state.review_id,
+              vedom:this.vedom
             });
           }
-        } else {
-          this.props.navigation.navigate("AfterEightPm");
-        }
+        
       })
       .catch(error => {
         console.log(error, 66);
@@ -221,6 +227,7 @@ export default class Estimate extends Component {
   };
 
   render() {
+    
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -232,6 +239,19 @@ export default class Estimate extends Component {
               <Text style={styles.subHeader}>
                 {this.cons.name || this.cons.name_of_agency}
               </Text>
+              {this.cons.photo ? (
+                <Image
+                  style={{
+                    width: '100%',
+                    height: 100,
+                    marginTop: 16,
+                    resizeMode: 'contain',
+                  }}
+                  source={{
+                    uri: base_url + '/' + this.cons.photo,
+                  }}
+                />
+              ) : null}
               <StarRating
                 maxStars={5}
                 rating={this.state.selectedStar}
