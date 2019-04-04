@@ -1,7 +1,7 @@
 ### Digital Agent
 ## Library
 "axios": "^0.18.0",
-"lodash": "^4.17.11",
+*"lodash": "^4.17.11",
 "react": "16.6.3",
 "react-native": "0.58.0-rc.2",
 "react-native-circular-progress": "^1.0.1",
