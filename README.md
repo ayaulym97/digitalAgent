@@ -27,5 +27,5 @@
 ### Run application
 IOS:yarn run ios
 Android:yarn run android
-###Build Release version of app
+### Build Release version of app(ipa & apk)
 https://medium.com/@tunvirrahmantusher/create-ipa-and-apk-from-react-native-72fe53c6a8db
